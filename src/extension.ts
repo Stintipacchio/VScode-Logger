@@ -10,6 +10,7 @@ import VScodeLogger from '../lib/VScode-logger.js';
 let panel: any;
 let panel_created = false;
 let activeLogger = false;
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -39,12 +40,43 @@ async function activate(context: any) {
 		const ChartJS_URI = panel.webview.asWebviewUri(ChartJS_PATH);
 
 		/* Setting the html content of the webview. 	*/
+		
+		let chartloader = ``;
+		if (VScodeLogger.auth){
+			chartloader= `window.onload = function() {
+				
+		
+				const CtxLines = document.getElementById('LinesCanvas');
+		
+				let LinesChartConfig = this.createConfig("Lines", [${VScodeLogger.dashView.lines.inserted}, ${VScodeLogger.dashView.lines.deleted}, ${VScodeLogger.dashView.lines.modified}], ['Inserted', 'Deleted', 'Modified']);
+		
+				let LinesChart = new Chart(CtxLines, LinesChartConfig);
+		
+		
+		
+				const CtxComments = document.getElementById('CommentsCanvas');
+		
+				let CommentsChartConfig = this.createConfig("Comments", [${VScodeLogger.dashView.comments.inserted}, ${VScodeLogger.dashView.comments.deleted}], ['Inserted', 'Deleted']);
+		
+				let CommentsChart = new Chart(CtxComments, CommentsChartConfig);
+		
+		
+		
+				const CtxTests = document.getElementById('TestsCanvas');
+		
+				let TestsChartConfig = this.createConfig("Tests", [${VScodeLogger.dashView.tests.inserted}, ${VScodeLogger.dashView.tests.deleted}], ['Inserted', 'Deleted']);
+		
+				let TestsChart = new Chart(CtxTests, TestsChartConfig);
+				
+		
+			}`;
+		}
 
-		if (activeLogger) panel.webview.html = getWebviewContent(ChartJS_URI);
+		if (activeLogger) panel.webview.html = getWebviewContent(ChartJS_URI, chartloader);
 		
 		setInterval(function(){ 
 			if(activeLogger) {
-				panel.webview.html = getWebviewContent(ChartJS_URI);
+				panel.webview.html = getWebviewContent(ChartJS_URI, chartloader);
 			}
 		}, 1000);
 		
@@ -57,7 +89,8 @@ async function activate(context: any) {
 	context.subscriptions.push(disposable);
 }
 
-function getWebviewContent(ChartJS_URI: any) {
+
+function getWebviewContent(ChartJS_URI: any, chartloader: any) {
 	return `<!DOCTYPE html>
 	<html lang="en">
 	<head>
@@ -69,33 +102,8 @@ function getWebviewContent(ChartJS_URI: any) {
 	<script src="${ChartJS_URI}"></script>
 
 	<script>
-	
-	window.onload = function() {
 
-
-		const CtxLines = document.getElementById('LinesCanvas');
-
-		let LinesChartConfig = this.createConfig("Lines", [${VScodeLogger.dashView.lines.inserted}, ${VScodeLogger.dashView.lines.deleted}, ${VScodeLogger.dashView.lines.modified}], ['Inserted', 'Deleted', 'Modified']);
-
-		let LinesChart = new Chart(CtxLines, LinesChartConfig);
-
-
-
-		const CtxComments = document.getElementById('CommentsCanvas');
-
-		let CommentsChartConfig = this.createConfig("Comments", [${VScodeLogger.dashView.comments.inserted}, ${VScodeLogger.dashView.comments.deleted}], ['Inserted', 'Deleted']);
-
-		let CommentsChart = new Chart(CtxComments, CommentsChartConfig);
-
-
-
-		const CtxTests = document.getElementById('TestsCanvas');
-
-		let TestsChartConfig = this.createConfig("Tests", [${VScodeLogger.dashView.tests.inserted}, ${VScodeLogger.dashView.tests.deleted}], ['Inserted', 'Deleted']);
-
-		let TestsChart = new Chart(CtxTests, TestsChartConfig);
-
-	}
+	${chartloader}
 
 	function createConfig(title, DataValue, LabelsValue) {
 
