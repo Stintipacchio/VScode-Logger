@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const path = require('path');
-import atomLogger from '../lib/atom-logger.js';
+import VScodeLogger from '../lib/VScode-logger.js';
 
 
 // this method is called when your extension is activated
@@ -20,7 +20,7 @@ async function activate(context: any) {
 		path.join(context.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
 	);
 
-	await atomLogger.StartLogger();
+	await VScodeLogger.StartLogger();
 	let disposable = vscode.commands.registerCommand('vscode-logger.logger', async () => {
 		activeLogger = true;
 		if (!panel_created) {
@@ -75,7 +75,7 @@ function getWebviewContent(ChartJS_URI: any) {
 
 		const CtxLines = document.getElementById('LinesCanvas');
 
-		let LinesChartConfig = this.createConfig("Lines", [${atomLogger.dashView.lines.inserted}, ${atomLogger.dashView.lines.deleted}, ${atomLogger.dashView.lines.modified}], ['Inserted', 'Deleted', 'Modified']);
+		let LinesChartConfig = this.createConfig("Lines", [${VScodeLogger.dashView.lines.inserted}, ${VScodeLogger.dashView.lines.deleted}, ${VScodeLogger.dashView.lines.modified}], ['Inserted', 'Deleted', 'Modified']);
 
 		let LinesChart = new Chart(CtxLines, LinesChartConfig);
 
@@ -83,7 +83,7 @@ function getWebviewContent(ChartJS_URI: any) {
 
 		const CtxComments = document.getElementById('CommentsCanvas');
 
-		let CommentsChartConfig = this.createConfig("Comments", [${atomLogger.dashView.comments.inserted}, ${atomLogger.dashView.comments.deleted}], ['Inserted', 'Deleted']);
+		let CommentsChartConfig = this.createConfig("Comments", [${VScodeLogger.dashView.comments.inserted}, ${VScodeLogger.dashView.comments.deleted}], ['Inserted', 'Deleted']);
 
 		let CommentsChart = new Chart(CtxComments, CommentsChartConfig);
 
@@ -91,7 +91,7 @@ function getWebviewContent(ChartJS_URI: any) {
 
 		const CtxTests = document.getElementById('TestsCanvas');
 
-		let TestsChartConfig = this.createConfig("Tests", [${atomLogger.dashView.tests.inserted}, ${atomLogger.dashView.tests.deleted}], ['Inserted', 'Deleted']);
+		let TestsChartConfig = this.createConfig("Tests", [${VScodeLogger.dashView.tests.inserted}, ${VScodeLogger.dashView.tests.deleted}], ['Inserted', 'Deleted']);
 
 		let TestsChart = new Chart(CtxTests, TestsChartConfig);
 
@@ -133,7 +133,7 @@ function getWebviewContent(ChartJS_URI: any) {
 
 	<body>
 
-	${atomLogger.doctype.window.document.body.innerHTML}
+	${VScodeLogger.doctype.window.document.body.innerHTML}
 	
 	<canvas id="LinesCanvas"></canvas>
 
