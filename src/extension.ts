@@ -53,39 +53,11 @@ async function activate(context: any) {
 			activeLogger = false;
 		});
 
-		// Handle messages from the webview
-		/*panel.webview.onDidReceiveMessage(
-			async message => {
-			switch (message.command) {
-				case 'alert':
-					vscode.window.showErrorMessage(message.text);
-				return;
-	
-				
-				case 'workspace':
-					let editor = vscode.window.activeTextEditor;
-					let Text = editor.document.getText();
-					await panel.webview.postMessage({ workspace: [vscode.window.activeTextEditor, vscode.window.activeTextEditor.document.fileName, Text] });
-				return;
-				
-				case 'modules_loader':
-					await panel.webview.postMessage({ modules: [sqlite3, chart, difflib, home, SimpleNodeLogger, network] });
-				return;
-				
-	
-			}
-			},
-			undefined,
-			context.subscriptions
-		);*/
-
 	})
 	context.subscriptions.push(disposable);
 }
-//<meta http-equiv="Content-Security-Policy" content="default-src *; script-src *;">
+
 function getWebviewContent(ChartJS_URI: any) {
-	//console.log(ChartJS_URI);
-	//console.log(atomLogger.doctype.window.document.body.innerHTML);
 	return `<!DOCTYPE html>
 	<html lang="en">
 	<head>
