@@ -15,75 +15,75 @@ let activeLogger = false;
  */
 /* Creating a webview panel and setting the html content of the webview. */
 async function activate(context: any) {
-/*
+
 	const ChartJS_PATH = vscode.Uri.file(
-		path.join(context.extensionPath, 'node_modules', 'chart.js', 'dist', 'chart.js')
+		path.join(context.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
 	);
-*/
+
 	await atomLogger.StartLogger();
 	let disposable = vscode.commands.registerCommand('vscode-logger.logger', async () => {
-	activeLogger = true;
-	if(!panel_created){
-		panel = vscode.window.createWebviewPanel(
-			'logger',
-			'Logger',
-			vscode.ViewColumn.One,
-			{
-				enableScripts: true,
-				localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'node_modules'))]
+		activeLogger = true;
+		if (!panel_created) {
+			panel = vscode.window.createWebviewPanel(
+				'logger',
+				'Logger',
+				vscode.ViewColumn.One,
+				{
+					enableScripts: true,
+					localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'node_modules'))]
+				}
+			);
+		}
+		panel_created = true;
+
+		const ChartJS_URI = panel.webview.asWebviewUri(ChartJS_PATH);
+
+		/* Setting the html content of the webview. 	*/
+
+		if (activeLogger) panel.webview.html = getWebviewContent(ChartJS_URI);
+		
+		setInterval(function(){ 
+			if(activeLogger) {
+				panel.webview.html = getWebviewContent(ChartJS_URI);
 			}
-		);
-	}
-	panel_created = true;
+		}, 1000);
+		
+		panel.onDidDispose(function () {
+			panel_created = false;
+			activeLogger = false;
+		});
 
-	//const ChartJS_URI = panel.webview.asWebviewUri(ChartJS_PATH);
+		// Handle messages from the webview
+		/*panel.webview.onDidReceiveMessage(
+			async message => {
+			switch (message.command) {
+				case 'alert':
+					vscode.window.showErrorMessage(message.text);
+				return;
+	
+				
+				case 'workspace':
+					let editor = vscode.window.activeTextEditor;
+					let Text = editor.document.getText();
+					await panel.webview.postMessage({ workspace: [vscode.window.activeTextEditor, vscode.window.activeTextEditor.document.fileName, Text] });
+				return;
+				
+				case 'modules_loader':
+					await panel.webview.postMessage({ modules: [sqlite3, chart, difflib, home, SimpleNodeLogger, network] });
+				return;
+				
+	
+			}
+			},
+			undefined,
+			context.subscriptions
+		);*/
 
-	/* Setting the html content of the webview. */
-	
-	if(activeLogger) panel.webview.html = getWebviewContent();
-	
-	setInterval(function(){ 
-		if(activeLogger) {
-			panel.webview.html = getWebviewContent();
-		}
-	}, 1000);
-	
-	panel.onDidDispose(function(){
-		panel_created = false;
-		activeLogger = false;
-	});
-	
-	// Handle messages from the webview
-	/*panel.webview.onDidReceiveMessage(
-		async message => {
-		switch (message.command) {
-			case 'alert':
-				vscode.window.showErrorMessage(message.text);
-			return;
-
-			
-			case 'workspace':
-				let editor = vscode.window.activeTextEditor;
-				let Text = editor.document.getText();
-				await panel.webview.postMessage({ workspace: [vscode.window.activeTextEditor, vscode.window.activeTextEditor.document.fileName, Text] });
-			return;
-			
-			case 'modules_loader':
-				await panel.webview.postMessage({ modules: [sqlite3, chart, difflib, home, SimpleNodeLogger, network] });
-			return;
-			
-
-		}
-		},
-		undefined,
-		context.subscriptions
-	);*/
-	
 	})
 	context.subscriptions.push(disposable);
-  }
+}
 //<meta http-equiv="Content-Security-Policy" content="default-src *; script-src *;">
-function getWebviewContent() {
+function getWebviewContent(ChartJS_URI: any) {
 	//console.log(ChartJS_URI);
 	//console.log(atomLogger.doctype.window.document.body.innerHTML);
 	return `<!DOCTYPE html>
@@ -94,15 +94,88 @@ function getWebviewContent() {
 		<title>VScode-Logger</title>
 	</head>
 
+	<script src="${ChartJS_URI}"></script>
+
+	<script>
+	
+	window.onload = function() {
+
+
+		const CtxLines = document.getElementById('LinesCanvas');
+
+		let LinesChartConfig = this.createConfig("Lines", [${atomLogger.dashView.lines.inserted}, ${atomLogger.dashView.lines.deleted}, ${atomLogger.dashView.lines.modified}], ['Inserted', 'Deleted', 'Modified']);
+
+		let LinesChart = new Chart(CtxLines, LinesChartConfig);
+
+
+
+		const CtxComments = document.getElementById('CommentsCanvas');
+
+		let CommentsChartConfig = this.createConfig("Comments", [${atomLogger.dashView.comments.inserted}, ${atomLogger.dashView.comments.deleted}], ['Inserted', 'Deleted']);
+
+		let CommentsChart = new Chart(CtxComments, CommentsChartConfig);
+
+
+
+		const CtxTests = document.getElementById('TestsCanvas');
+
+		let TestsChartConfig = this.createConfig("Tests", [${atomLogger.dashView.tests.inserted}, ${atomLogger.dashView.tests.deleted}], ['Inserted', 'Deleted']);
+
+		let TestsChart = new Chart(CtxTests, TestsChartConfig);
+
+	}
+
+	function createConfig(title, DataValue, LabelsValue) {
+
+		var conf = {
+		  type : 'doughnut',
+		  data : {
+			labels : LabelsValue,
+			datasets : [{
+			  data : DataValue,
+			  backgroundColor : ['#2ecc71', '#c0392b', '#f1c40f' ]
+			}]
+		  },
+		  options: {
+			responsive: true,
+			maintainAspectRatio: true,
+			legend: {
+			  labels: {
+				fontColor: '#95a5a6',
+			  },
+			  position: 'left'
+			},
+			title: {
+			  fontColor: '#95a5a6',
+			  display: true,
+			  text : title
+			},
+			animation: false
+		  }
+		}
+		return conf;
+	  }
+
+
+	</script>
+
 	<body>
+
 	${atomLogger.doctype.window.document.body.innerHTML}
+	
+	<canvas id="LinesCanvas"></canvas>
+
+	<canvas id="CommentsCanvas"></canvas>
+
+	<canvas id="TestsCanvas"></canvas>
+
 	</body>
 
 	</html>`;
-  }
+}
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
 	activate,
