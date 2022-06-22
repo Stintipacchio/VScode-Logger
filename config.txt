@@ -1,6 +1,0 @@
-serverAddress: ://aminsep.disi.unibo.it/logger
-email: andrea.loretti2@studio.unibo.it
-password: fioridicampo20
-protocol: https
-refreshTime: 100
-remember: true
