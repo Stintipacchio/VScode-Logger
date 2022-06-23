@@ -7,7 +7,7 @@ import VScodeLogger from '../lib/VScode-logger.js';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-let panel: any;
+let panel: vscode.WebviewPanel;
 let panel_created = false;
 let activeLogger = false;
 
