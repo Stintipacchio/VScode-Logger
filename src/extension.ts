@@ -28,7 +28,7 @@ async function activate(context: any) {
 			panel = vscode.window.createWebviewPanel(
 				'logger',
 				'Logger',
-				vscode.ViewColumn.One,
+				vscode.ViewColumn.Beside,
 				{
 					enableScripts: true,
 					localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'node_modules'))]
