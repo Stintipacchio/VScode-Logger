@@ -11,11 +11,8 @@ let panel: vscode.WebviewPanel;
 let panel_created = false;
 let activeLogger = false;
 
-/**
- * @param {vscode.ExtensionContext} context
- */
 /* Creating a webview panel and setting the html content of the webview. */
-async function activate(context: any) {
+async function activate(context: vscode.ExtensionContext) {
 
 	const ChartJS_PATH = vscode.Uri.file(
 		path.join(context.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
