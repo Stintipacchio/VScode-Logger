@@ -21,7 +21,7 @@ async function activate(context: vscode.ExtensionContext) {
 		provider.loggerShow();
 	}
 	panel_created = true;
-	
+
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
 	);
@@ -54,19 +54,15 @@ class Logger implements vscode.WebviewViewProvider {
 
 
 		/* Setting the html content of the webview. */
-		
-		
-
 		if (activeLogger) webviewView.webview.html = this.getWebviewContent(webviewView.webview);
-
-		
+	
 		setInterval(() =>{ 
 			if(activeLogger) {
 				webviewView.webview.html = this.getWebviewContent(webviewView.webview);
 			}
 		}, 1000);
 		
-		webviewView.onDidDispose(function () {
+		webviewView.onDidDispose(() =>{
 			panel_created = false;
 			activeLogger = false;
 		});
