@@ -19,7 +19,7 @@
 				{
 					"type": "webview",
 					"id": "logger.loggerView",
-					"name": "VScode Logger"
+					"name": "VS-Logger"
 				}
 			]
 		}

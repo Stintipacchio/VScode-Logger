@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
+let home = require('user-home');
+import * as fs from 'fs';
 import VScodeLogger from '../lib/VScode-logger.js';
 
 
@@ -25,7 +27,6 @@ async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
 	);
-
 }
 
 class Logger implements vscode.WebviewViewProvider {
@@ -36,6 +37,7 @@ class Logger implements vscode.WebviewViewProvider {
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
+		
 	) { }
 
 	public resolveWebviewView(
@@ -52,20 +54,36 @@ class Logger implements vscode.WebviewViewProvider {
 			localResourceRoots: [vscode.Uri.file(path.join(this._extensionContext.extensionPath, 'node_modules'))]
 		};
 
+		// Handle messages from the webview
+		webviewView.webview.onDidReceiveMessage(
+			async message => {
+			switch (message.command) {
+				case 'credentials':
+					fs.writeFile(home + '/.VScode-Logger-config.txt',"serverAddress: " + message.server + "\n" + "email: " + message.username + "\n" + "password: " + message.password + "\n" + "protocol: https\n" + "refreshTime: 100\n" + "remember: " + message.remember + "\n", function (err: any) {
+						if (err) throw err;
+					});
+					VScodeLogger.authentication_routine();
+				return;
+			}
+			},
+			undefined,
+			this._extensionContext.subscriptions
+		);
 
 		/* Setting the html content of the webview. */
 		if (activeLogger) webviewView.webview.html = this.getWebviewContent(webviewView.webview);
-	
+		
 		setInterval(() =>{ 
 			if(activeLogger) {
 				webviewView.webview.html = this.getWebviewContent(webviewView.webview);
 			}
-		}, 1000);
+		}, 30000);
 		
 		webviewView.onDidDispose(() =>{
 			panel_created = false;
 			activeLogger = false;
 		});
+		
 		
 	}
 	
@@ -86,8 +104,10 @@ class Logger implements vscode.WebviewViewProvider {
 		const ChartJS_URI = webview.asWebviewUri(ChartJS_PATH);
 
 		let chartloader = ``;
+		let formloader = ``;
 		if (VScodeLogger.auth){
-			chartloader= `window.onload = function() {
+			chartloader = 
+			`window.onload = function() {
 				
 		
 				const CtxLines = document.getElementById('LinesCanvas');
@@ -112,8 +132,58 @@ class Logger implements vscode.WebviewViewProvider {
 		
 				let TestsChart = new Chart(CtxTests, TestsChartConfig);
 				
-		
 			}`;
+
+			formloader = 		
+			`<canvas id="LinesCanvas"></canvas>
+
+			<canvas id="CommentsCanvas"></canvas>
+	
+			<canvas id="TestsCanvas"></canvas>`
+		}
+		else {
+			formloader = 
+			`<script>
+				const vscode = acquireVsCodeApi();
+
+				async function send_credentials(username, password, remember, server){
+					await vscode.postMessage({
+						command: 'credentials',
+						username: username,
+						password: password,
+						remember: remember,
+						server: server
+					});
+				}
+
+			</script>
+
+			<form name="loginForm" onsubmit = 'document.write(send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked,loginForm.srvadrr.value));'>
+				<div class="container">
+
+					<label for="uname"><b>Username</b></label><br>
+					<input type="text" placeholder="Enter Username" name="uname" required>
+				
+					<br>
+
+					<label for="psw"><b>Password</b></label><br>
+					<input type="password" placeholder="Enter Password" name="psw" required>
+
+					<br>
+
+					<label for="srvadrr"><b>Server Address</b></label><br>
+					<input type="text" placeholder="://internet.example.com" name="srvadrr" required>
+
+					<br>
+
+					<button type="submit">Login</button>
+
+					<label>
+					<input type="checkbox" checked="checked" name="remember"> Remember me
+					</label>
+
+				</div>
+			</form>`;
 		}
 
 		return `<!DOCTYPE html>
@@ -167,12 +237,8 @@ class Logger implements vscode.WebviewViewProvider {
 		<body>
 
 		${VScodeLogger.doctype.window.document.body.innerHTML}
-		
-		<canvas id="LinesCanvas"></canvas>
 
-		<canvas id="CommentsCanvas"></canvas>
-
-		<canvas id="TestsCanvas"></canvas>
+		${formloader}
 
 		</body>
 
