@@ -59,10 +59,20 @@ class Logger implements vscode.WebviewViewProvider {
 			async message => {
 			switch (message.command) {
 				case 'credentials':
-					fs.writeFile(home + '/.VScode-Logger-config.txt',"serverAddress: " + message.server + "\n" + "email: " + message.username + "\n" + "password: " + message.password + "\n" + "protocol: https\n" + "refreshTime: 100\n" + "remember: " + message.remember + "\n", function (err: any) {
-						if (err) throw err;
-					});
-					VScodeLogger.authentication_routine();
+					if(message.remember){
+						await fs.writeFile(home + '/.VScode-Logger-config.txt',"serverAddress: " + message.server + "\n" + "email: " + message.username + "\n" + "password: " + message.password + "\n" + "protocol: https\n" + "refreshTime: 100\n" + "remember: " + message.remember + "\n", function (err: any) {
+							if (err) throw err;
+						});
+					}
+					else{
+						VScodeLogger.config.serverAddress = message.server;
+						VScodeLogger.config.email = message.username;
+						VScodeLogger.config.password = message.password;
+						VScodeLogger.config.protocol = 'https';
+						VScodeLogger.config.refreshTime = 100;
+						VScodeLogger.config.remember = message.remember;
+					}
+					await VScodeLogger.authentication_routine();
 				return;
 			}
 			},
