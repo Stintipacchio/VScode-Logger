@@ -10,17 +10,19 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished",
-		"onCommand:vscode-logger.logger"
+		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "vscode-logger.logger",
-				"title": "Logger"
-			}
-		]
+		"views": {
+			"explorer": [
+				{
+					"type": "webview",
+					"id": "logger.loggerView",
+					"name": "VScode Logger"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",

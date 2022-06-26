@@ -7,37 +7,88 @@ import VScodeLogger from '../lib/VScode-logger.js';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-let panel: vscode.WebviewPanel;
+
 let panel_created = false;
 let activeLogger = false;
 
 /* Creating a webview panel and setting the html content of the webview. */
 async function activate(context: vscode.ExtensionContext) {
-
-	const ChartJS_PATH = vscode.Uri.file(
-		path.join(context.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
-	);
+	const provider = new Logger(context);
 
 	await VScodeLogger.StartLogger();
-	let disposable = vscode.commands.registerCommand('vscode-logger.logger', async () => {
-		activeLogger = true;
-		if (!panel_created) {
-			panel = vscode.window.createWebviewPanel(
-				'logger',
-				'Logger',
-				vscode.ViewColumn.Beside,
-				{
-					enableScripts: true,
-					localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'node_modules'))]
-				}
-			);
-		}
-		panel_created = true;
+	activeLogger = true;
+	if (!panel_created) {
+		provider.loggerShow();
+	}
+	panel_created = true;
+	
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
+	);
 
-		const ChartJS_URI = panel.webview.asWebviewUri(ChartJS_PATH);
+}
 
-		/* Setting the html content of the webview. 	*/
+class Logger implements vscode.WebviewViewProvider {
+
+	public static readonly viewType = 'logger.loggerView';
+
+	private _view?: vscode.WebviewView;
+
+	constructor(
+		private readonly _extensionContext: vscode.ExtensionContext,
+	) { }
+
+	public resolveWebviewView(
+		webviewView: vscode.WebviewView,
+		context: vscode.WebviewViewResolveContext,
+		_token: vscode.CancellationToken,
+	) {
+
+		this._view = webviewView;
+
+		webviewView.webview.options =					
+		{
+			enableScripts: true,
+			localResourceRoots: [vscode.Uri.file(path.join(this._extensionContext.extensionPath, 'node_modules'))]
+		};
+
+
+		/* Setting the html content of the webview. */
 		
+		
+
+		if (activeLogger) webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+
+		
+		setInterval(() =>{ 
+			if(activeLogger) {
+				webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+			}
+		}, 1000);
+		
+		webviewView.onDidDispose(function () {
+			panel_created = false;
+			activeLogger = false;
+		});
+		
+	}
+	
+
+	public loggerShow(){
+		if (this._view){
+			this._view.show?.(true);
+		}
+	}
+
+
+	private getWebviewContent(webview: vscode.Webview) {
+
+		const ChartJS_PATH = vscode.Uri.file(
+			path.join(this._extensionContext.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
+		);
+		
+		const ChartJS_URI = webview.asWebviewUri(ChartJS_PATH);
+
 		let chartloader = ``;
 		if (VScodeLogger.auth){
 			chartloader= `window.onload = function() {
@@ -69,86 +120,69 @@ async function activate(context: vscode.ExtensionContext) {
 			}`;
 		}
 
-		if (activeLogger) panel.webview.html = getWebviewContent(ChartJS_URI, chartloader);
-		
-		setInterval(function(){ 
-			if(activeLogger) {
-				panel.webview.html = getWebviewContent(ChartJS_URI, chartloader);
-			}
-		}, 1000);
-		
-		panel.onDidDispose(function () {
-			panel_created = false;
-			activeLogger = false;
-		});
+		return `<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>VScode-Logger</title>
+		</head>
 
-	})
-	context.subscriptions.push(disposable);
-}
+		<script src="${ChartJS_URI}"></script>
 
+		<script>
 
-function getWebviewContent(ChartJS_URI: any, chartloader: any) {
-	return `<!DOCTYPE html>
-	<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>VScode-Logger</title>
-	</head>
+		${chartloader}
 
-	<script src="${ChartJS_URI}"></script>
+		function createConfig(title, DataValue, LabelsValue) {
 
-	<script>
-
-	${chartloader}
-
-	function createConfig(title, DataValue, LabelsValue) {
-
-		var conf = {
-		  type : 'doughnut',
-		  data : {
-			labels : LabelsValue,
-			datasets : [{
-			  data : DataValue,
-			  backgroundColor : ['#2ecc71', '#c0392b', '#f1c40f' ]
-			}]
-		  },
-		  options: {
-			responsive: true,
-			maintainAspectRatio: true,
-			legend: {
-			  labels: {
+			var conf = {
+			type : 'doughnut',
+			data : {
+				labels : LabelsValue,
+				datasets : [{
+				data : DataValue,
+				backgroundColor : ['#2ecc71', '#c0392b', '#f1c40f' ]
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: true,
+				legend: {
+				labels: {
+					fontColor: '#95a5a6',
+				},
+				position: 'left'
+				},
+				title: {
 				fontColor: '#95a5a6',
-			  },
-			  position: 'left'
-			},
-			title: {
-			  fontColor: '#95a5a6',
-			  display: true,
-			  text : title
-			},
-			animation: false
-		  }
+				display: true,
+				text : title
+				},
+				animation: false
+			}
+			}
+			return conf;
 		}
-		return conf;
-	  }
 
 
-	</script>
+		</script>
 
-	<body>
+		<body>
 
-	${VScodeLogger.doctype.window.document.body.innerHTML}
-	
-	<canvas id="LinesCanvas"></canvas>
+		${VScodeLogger.doctype.window.document.body.innerHTML}
+		
+		<canvas id="LinesCanvas"></canvas>
 
-	<canvas id="CommentsCanvas"></canvas>
+		<canvas id="CommentsCanvas"></canvas>
 
-	<canvas id="TestsCanvas"></canvas>
+		<canvas id="TestsCanvas"></canvas>
 
-	</body>
+		</body>
 
-	</html>`;
+		</html>`;
+		
+	}
 }
 
 // this method is called when your extension is deactivated
