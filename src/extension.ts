@@ -6,7 +6,6 @@ let home = require('user-home');
 import * as fs from 'fs';
 import VScodeLogger from '../lib/VScode-logger.js';
 
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -102,8 +101,6 @@ class Logger implements vscode.WebviewViewProvider {
 			panel_created = false;
 			activeLogger = false;
 		});
-		
-		
 	}
 	
 
@@ -113,7 +110,6 @@ class Logger implements vscode.WebviewViewProvider {
 		}
 	}
 
-
 	private getWebviewContent(webview: vscode.Webview) {
 
 		const ChartJS_PATH = vscode.Uri.file(
@@ -121,7 +117,7 @@ class Logger implements vscode.WebviewViewProvider {
 		);
 		
 		const ChartJS_URI = webview.asWebviewUri(ChartJS_PATH);
-
+		
 		let chartloader = ``;
 		let formloader = ``;
 		if (VScodeLogger.auth){
@@ -153,9 +149,8 @@ class Logger implements vscode.WebviewViewProvider {
 				
 			}`;
 
-			formloader = 		
-			`
-			<label>Weekly Statistics</label>
+			formloader =
+			`<label>Weekly Statistics</label>
 
 			<canvas id="LinesCanvas"></canvas>
 
@@ -265,7 +260,6 @@ class Logger implements vscode.WebviewViewProvider {
 			}
 			return conf;
 		}
-
 
 		</script>
 
