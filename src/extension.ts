@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 let home = require('user-home');
 import * as fs from 'fs';
-import VScodeLogger from '../lib/VScode-logger.js';
+const VScodeLogger = require('../lib/VScode-logger.js');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
