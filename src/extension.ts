@@ -71,12 +71,20 @@ class Logger implements vscode.WebviewViewProvider {
 						VScodeLogger.config.refreshTime = 100;
 						VScodeLogger.config.remember = message.remember;
 					}
+					webviewloader();
 					await VScodeLogger.authentication_routine();
 					webviewloader();
 				return;
 				case 'logout':
 					await VScodeLogger.logout();
 					webviewloader();
+				return;
+				case 'stopwatch':
+					let stopwatch = VScodeLogger.dashView.time.textContent;
+					webviewView.webview.postMessage({ 
+						command: 'stopwatch',
+						time: stopwatch
+					});
 				return;
 			}
 			},
@@ -95,7 +103,7 @@ class Logger implements vscode.WebviewViewProvider {
 			if(activeLogger) {
 				webviewloader();
 			}
-		}, 30000);
+		}, 40000);
 		
 		webviewView.onDidDispose(() =>{
 			panel_created = false;
@@ -103,7 +111,6 @@ class Logger implements vscode.WebviewViewProvider {
 		});
 	}
 	
-
 	public loggerShow(){
 		if (this._view){
 			this._view.show?.(true);
@@ -260,12 +267,35 @@ class Logger implements vscode.WebviewViewProvider {
 			}
 			return conf;
 		}
+		</script>
 
+		<script>			
+			setInterval(async () =>{
+				await vscode.postMessage({
+					command: 'stopwatch',
+				});
+			}, 1000);
+
+			window.addEventListener('message', event => {
+
+				const message = event.data;
+
+				switch (message.command) {
+					case 'stopwatch':
+						let stopwatch = message.time;
+						document.getElementById("stopwatch").innerText = stopwatch;
+					return;
+				}
+			});
+			
 		</script>
 
 		<body>
 
 		${VScodeLogger.doctype.window.document.body.innerHTML}
+
+		<div>Session Time</div>
+		<div id="stopwatch">00:00:00</div>
 
 		${formloader}
 
@@ -282,4 +312,4 @@ function deactivate() { }
 module.exports = {
 	activate,
 	deactivate
-}
+};
