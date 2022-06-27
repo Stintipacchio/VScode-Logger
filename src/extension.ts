@@ -73,6 +73,11 @@ class Logger implements vscode.WebviewViewProvider {
 						VScodeLogger.config.remember = message.remember;
 					}
 					await VScodeLogger.authentication_routine();
+					webviewloader();
+				return;
+				case 'logout':
+					await VScodeLogger.logout();
+					webviewloader();
 				return;
 			}
 			},
@@ -81,11 +86,15 @@ class Logger implements vscode.WebviewViewProvider {
 		);
 
 		/* Setting the html content of the webview. */
-		if (activeLogger) webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+		const webviewloader = () =>{
+			webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+		};
+
+		if (activeLogger) webviewloader();
 		
 		setInterval(() =>{ 
 			if(activeLogger) {
-				webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+				webviewloader();
 			}
 		}, 30000);
 		
@@ -145,11 +154,28 @@ class Logger implements vscode.WebviewViewProvider {
 			}`;
 
 			formloader = 		
-			`<canvas id="LinesCanvas"></canvas>
+			`
+			<label>Weekly Statistics</label>
+
+			<canvas id="LinesCanvas"></canvas>
 
 			<canvas id="CommentsCanvas"></canvas>
 	
-			<canvas id="TestsCanvas"></canvas>`
+			<canvas id="TestsCanvas"></canvas>
+
+			<script>
+
+				const vscode = acquireVsCodeApi();
+
+				async function logout(){
+					await vscode.postMessage({
+						command: 'logout',
+					});
+				}
+
+			</script>
+
+			<button onclick="logout()">Logout</button>`;
 		}
 		else {
 			formloader = 
@@ -213,30 +239,29 @@ class Logger implements vscode.WebviewViewProvider {
 		function createConfig(title, DataValue, LabelsValue) {
 
 			var conf = {
-			type : 'doughnut',
-			data : {
-				labels : LabelsValue,
-				datasets : [{
-				data : DataValue,
-				backgroundColor : ['#2ecc71', '#c0392b', '#f1c40f' ]
-				}]
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: true,
-				legend: {
-				labels: {
+				type : 'doughnut',
+				data : {
+					labels : LabelsValue,
+					datasets : [{
+					data : DataValue,
+					backgroundColor : ['#2ecc71', '#c0392b', '#f1c40f' ]
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					legend: {
+					labels: {
+						fontColor: '#95a5a6',
+					},
+					position: 'left'
+					},
+					title: {
 					fontColor: '#95a5a6',
-				},
-				position: 'left'
-				},
-				title: {
-				fontColor: '#95a5a6',
-				display: true,
-				text : title
-				},
-				animation: false
-			}
+					display: true,
+					text : title
+					}
+				}
 			}
 			return conf;
 		}
