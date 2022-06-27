@@ -4,7 +4,7 @@ This extension helps you store your code metrics through a continuose activity m
 
 ## Features
 
-Credentials persistence trough differents sessions, local DB storing alla offline data while he waiting for server connection. The exstension autostart with vscode.
+Credentials persistence trough differents sessions, local DB storing alla offline data while it waits for server connection. The exstension autostart with vscode.
 
 
 ## Requirements
