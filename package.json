@@ -24,6 +24,10 @@
 			]
 		}
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Stintipacchio/VScode-Logger.git"
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
 		"compile": "webpack",
