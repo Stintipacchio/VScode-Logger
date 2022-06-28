@@ -58,9 +58,9 @@
 	"dependencies": {
 		"bufferutil": "^4.0.6",
 		"chart.js": "^2.9.4",
+		"check-internet-connected": "^2.0.6",
 		"formdata-node": "^4.3.3",
 		"jsdifflib": "^1.1.0",
-		"navigator": "^1.0.1",
 		"network": "^0.6.1",
 		"node-fetch": "^3.2.6",
 		"simple-node-logger": "^21.8.12",
