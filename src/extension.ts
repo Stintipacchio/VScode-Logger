@@ -56,14 +56,6 @@ class Logger implements vscode.WebviewViewProvider {
 			localResourceRoots: [vscode.Uri.file(path.join(this._extensionContext.extensionPath, 'node_modules'))]
 		};
 
-		
-		setInterval(() =>{
-			webviewView.webview.postMessage({ 
-				command: 'stopwatch',
-				time: this.timer.clockvalue
-			});
-		}, 1000);
-
 		// Handle messages from the webview
 		webviewView.webview.onDidReceiveMessage(
 			async message => {
@@ -105,10 +97,14 @@ class Logger implements vscode.WebviewViewProvider {
 		if (activeLogger) webviewloader();
 		
 		setInterval(() =>{ 
+			webviewView.webview.postMessage({ 
+				command: 'stopwatch',
+				time: this.timer.clockvalue
+			});
 			if(activeLogger) {
 				webviewloader();
 			}
-		}, 40000);
+		}, 1000);
 		
 		webviewView.onDidDispose(() =>{
 			panel_created = false;
@@ -123,7 +119,6 @@ class Logger implements vscode.WebviewViewProvider {
 	}
 
 	private getWebviewContent(webview: vscode.Webview) {
-
 		const ChartJS_PATH = vscode.Uri.file(
 			path.join(this._extensionContext.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
 		);
@@ -274,7 +269,7 @@ class Logger implements vscode.WebviewViewProvider {
 		}
 		</script>
 
-		<script>			
+		<script>		
 			window.addEventListener('message', event => {
 
 				const message = event.data;
