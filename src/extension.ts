@@ -90,7 +90,6 @@ class Logger implements vscode.WebviewViewProvider {
 
 		/* Setting the html content of the webview. */
 		const webviewloader = () =>{
-			//console.log(this.getWebviewContent(webviewView.webview));
 			webviewView.webview.html = this.getWebviewContent(webviewView.webview);
 		};
 
