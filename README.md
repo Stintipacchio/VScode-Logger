@@ -25,8 +25,6 @@ The exstension will generate a configuration file and a log file in home folder.
 
 Enlarging the explorer tab could lead to glitch of the Charts.
 Inserting a non existent server will lead to a blank page to fix close and re open the extension tear menu.
-In case after installing the extension goes in boot loop navigate to vscode extensions folder(may vary location based on your OS), from there navigate to vscode-logger folder and run from CLI "npm i sqlite3" then restart vscode.
-
 
 ## Release Notes
 
