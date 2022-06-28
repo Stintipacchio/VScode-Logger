@@ -50,4 +50,8 @@ Release in testing all the feature should work properly.
 
 7) After the extension has been installed, you’ll be able to see it in the “Extensions “menu and manage it accordingly.
 
+## Credits
+
+This extension is a porting of the atom package "atom-logger" (https://github.com/elPeroN/atom-logger.git)
+
 
