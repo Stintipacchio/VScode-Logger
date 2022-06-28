@@ -4,7 +4,7 @@ This extension helps you store your code metrics through a continuose activity m
 
 ## How to use
 
-After the installation in the Explorer Tab will appear a teardown window named "VS LOGGER", from there you can login by inserting your credentials and server addres in the form.
+After the installation in the Explorer Tab will appear a teardown window named "VS-LOGGER", from there you can login by inserting your credentials and server addres in the form.
 
 ## Features
 

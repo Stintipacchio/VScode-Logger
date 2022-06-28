@@ -4,7 +4,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 let home = require('user-home');
 import * as fs from 'fs';
-const VScodeLogger = require('../lib/VScode-logger.js');
+import Stopwatch from '../lib/stopwatch.js';
+import VScodeLogger from '../lib/VScode-logger.js';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -34,10 +35,12 @@ class Logger implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 
+	public timer = new Stopwatch();
+
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
 		
-	) { }
+	) { this.timer.start(); }
 
 	public resolveWebviewView(
 		webviewView: vscode.WebviewView,
@@ -52,6 +55,14 @@ class Logger implements vscode.WebviewViewProvider {
 			enableScripts: true,
 			localResourceRoots: [vscode.Uri.file(path.join(this._extensionContext.extensionPath, 'node_modules'))]
 		};
+
+		
+		setInterval(() =>{
+			webviewView.webview.postMessage({ 
+				command: 'stopwatch',
+				time: this.timer.clockvalue
+			});
+		}, 1000);
 
 		// Handle messages from the webview
 		webviewView.webview.onDidReceiveMessage(
@@ -79,13 +90,6 @@ class Logger implements vscode.WebviewViewProvider {
 					await VScodeLogger.logout();
 					webviewloader();
 				return;
-				case 'stopwatch':
-					let stopwatch = VScodeLogger.dashView.time.textContent;
-					webviewView.webview.postMessage({ 
-						command: 'stopwatch',
-						time: stopwatch
-					});
-				return;
 			}
 			},
 			undefined,
@@ -94,6 +98,7 @@ class Logger implements vscode.WebviewViewProvider {
 
 		/* Setting the html content of the webview. */
 		const webviewloader = () =>{
+			//console.log(this.getWebviewContent(webviewView.webview));
 			webviewView.webview.html = this.getWebviewContent(webviewView.webview);
 		};
 
@@ -270,12 +275,6 @@ class Logger implements vscode.WebviewViewProvider {
 		</script>
 
 		<script>			
-			setInterval(async () =>{
-				await vscode.postMessage({
-					command: 'stopwatch',
-				});
-			}, 1000);
-
 			window.addEventListener('message', event => {
 
 				const message = event.data;
@@ -287,13 +286,13 @@ class Logger implements vscode.WebviewViewProvider {
 					return;
 				}
 			});
-			
 		</script>
 
 		<body>
-
-		${VScodeLogger.doctype.window.document.body.innerHTML}
-
+		<div>DashBoard</div>
+		<label>Current Session</label>
+		<div>Unsent Metrics</div>
+		<span>${VScodeLogger.unsentmetric}</span>
 		<div>Session Time</div>
 		<div id="stopwatch">00:00:00</div>
 
