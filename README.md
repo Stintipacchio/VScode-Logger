@@ -48,9 +48,11 @@ Release in testing all the feature should work properly.
 
 7) After the extension has been installed, you’ll be able to see it in the “Extensions “menu and manage it accordingly.
 
+
 ## Setting up extension for use 
 
 Open the extension folder in the vscode extensions folder (Windows %USERPROFILE%\. vscode\extensions. || macOS ~/.vscode/extensions || Linux ~/.vscode/extensions) then run from CLI "npm i sqlite3".
+
 
 ## Credits
 
