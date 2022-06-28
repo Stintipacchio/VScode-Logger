@@ -3,7 +3,7 @@
 out/**
 src/**
 node_modules/**
-.innometric.db
+.innometrics.db
 .gitignore
 .yarnrc
 webpack.config.js
