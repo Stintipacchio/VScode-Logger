@@ -24,7 +24,7 @@ The exstension will generate a configuration file and a log file in home folder.
 ## Known Issues
 
 Enlarging the explorer tab could lead to a visualization glitch of the Charts.
-Inserting a non existent server will lead to a blank page to fix close and reopen the tear menu.
+Inserting a non existent server will lead to a blank page to fix close and re open the tear menu.
 
 
 ## Release Notes
