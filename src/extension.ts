@@ -195,7 +195,7 @@ class Logger implements vscode.WebviewViewProvider {
 
 			</script>
 
-			<form name="loginForm" onsubmit = 'document.write(send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked,loginForm.srvadrr.value));'>
+			<form name="loginForm" onsubmit = 'send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked,loginForm.srvadrr.value);'>
 				<div class="container">
 
 					<label for="uname"><b>Username</b></label><br>
