@@ -1,71 +1,121 @@
 {
-	"name": "vscode-logger",
-	"displayName": "VScode-logger",
-	"description": "This extension helps you store your code metrics through a continuose activity monitoring such: lines, comments and tests added, modified or deleted. At the same time it also keeps track of the session time and files explorated.",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.68.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onStartupFinished"
-	],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"views": {
-			"explorer": [
-				{
-					"type": "webview",
-					"id": "logger.loggerView",
-					"name": "VS-Logger"
-				}
-			]
-		}
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Stintipacchio/VScode-Logger.git"
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack",
-		"watch": "webpack --watch",
-		"package": "webpack --mode production --devtool hidden-source-map",
-		"compile-tests": "tsc -p . --outDir out",
-		"watch-tests": "tsc -p . -w --outDir out",
-		"pretest": "npm run compile-tests && npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.2.0",
-		"@types/mocha": "^9.1.1",
-		"@types/node": "16.x",
-		"@types/vscode": "^1.68.0",
-		"@typescript-eslint/eslint-plugin": "^5.27.0",
-		"@typescript-eslint/parser": "^5.27.0",
-		"@vscode/test-electron": "^2.1.3",
-		"eslint": "^8.16.0",
-		"glob": "^8.0.3",
-		"mocha": "^10.0.0",
-		"ts-loader": "^9.3.0",
-		"typescript": "^4.7.2",
-		"webpack": "^5.72.1",
-		"webpack-cli": "^4.9.2"
-	},
-	"dependencies": {
-		"bufferutil": "^4.0.6",
-		"chart.js": "^2.9.4",
-		"check-internet-connected": "^2.0.6",
-		"formdata-node": "^4.3.3",
-		"jsdifflib": "^1.1.0",
-		"network": "^0.6.1",
-		"node-fetch": "^3.2.6",
-		"simple-node-logger": "^21.8.12",
-		"sqlite3": "^5.0.8",
-		"user-home": "^3.0.0",
-		"utf-8-validate": "^5.0.9"
-	}
+  "name": "vscode-logger",
+  "displayName": "VScode-logger",
+  "description": "This extension helps you store your code metrics through a continuose activity monitoring such: lines, comments and tests added, modified or deleted. At the same time it also keeps track of the session time and files explorated.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.68.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Vscode-Logger",
+      "properties": {
+        "serverAddress": {
+          "type": "string",
+          "default": "://aminsep.disi.unibo.it/logger",
+          "scope": "window",
+          "description": ""
+        },
+        "email": {
+          "type": "string",
+          "default": "andrea.loretti2@studio.unibo.it",
+          "scope": "window",
+          "description": ""
+        },
+        "password": {
+          "type": "string",
+          "default": "fioridicampo20",
+          "scope": "window",
+          "description": ""
+        },
+        "protocol": {
+          "type": "string",
+          "default": "https",
+          "scope": "window",
+          "enum": [
+            "http",
+            "https"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ]
+        },
+        "refreshTime": {
+          "type": "string",
+          "default": "100",
+          "scope": "window",
+          "description": ""
+        },
+        "rememberCredentials": {
+          "type": "boolean",
+          "scope": "window",
+          "default": true,
+          "description": ""
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "logger.loggerView",
+          "name": "VS-Logger"
+        }
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stintipacchio/VScode-Logger.git"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/edit-json-file": "^1.7.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.68.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "@vscode/test-electron": "^2.1.3",
+    "eslint": "^8.16.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.6",
+    "chart.js": "^2.9.4",
+    "check-internet-connected": "^2.0.6",
+    "edit-json-file": "^1.7.0",
+    "formdata-node": "^4.3.3",
+    "jsdifflib": "^1.1.0",
+    "network": "^0.6.1",
+    "node-fetch": "^3.2.6",
+    "simple-node-logger": "^21.8.12",
+    "sqlite3": "^5.0.8",
+    "user-home": "^3.0.0",
+    "utf-8-validate": "^5.0.9"
+  }
 }

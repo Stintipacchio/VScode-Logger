@@ -18,7 +18,7 @@ To work properly this extension need a internet connection.
 
 ## Extension Settings
 
-The exstension will generate a configuration file and a log file in home folder.
+The extension parameter can be changed in the extension settings tab.
 
 
 ## Known Issues

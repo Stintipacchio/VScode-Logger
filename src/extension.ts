@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 let home = require('user-home');
-import * as fs from 'fs';
+import * as editJsonFile from 'edit-json-file';
 import Stopwatch from '../lib/stopwatch.js';
 import VScodeLogger from '../lib/VScode-logger.js';
 
@@ -62,9 +62,13 @@ class Logger implements vscode.WebviewViewProvider {
 			switch (message.command) {
 				case 'credentials':
 					if(message.remember){
-						await fs.writeFile(home + '/.VScode-Logger-config.txt',"serverAddress: " + message.server + "\n" + "email: " + message.username + "\n" + "password: " + message.password + "\n" + "protocol: https\n" + "refreshTime: 100\n" + "remember: " + message.remember + "\n", function (err: any) {
-							if (err) throw err;
+						let configFile = editJsonFile(`./package.json`, {
+							autosave: true
 						});
+						configFile.set("contributes.configuration.properties.serverAddress.default", message.server);
+						configFile.set("contributes.configuration.properties.email.default", message.username);
+						configFile.set("contributes.configuration.properties.password.default", message.password);
+						configFile.set("contributes.configuration.properties.rememberCredentials.default", message.remember);
 					}
 					else{
 						VScodeLogger.config.serverAddress = message.server;

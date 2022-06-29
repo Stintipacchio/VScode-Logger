@@ -4,6 +4,7 @@ out/**
 src/**
 node_modules/**
 dist/.innometrics.db
+.innometrics.db
 .gitignore
 .yarnrc
 webpack.config.js
