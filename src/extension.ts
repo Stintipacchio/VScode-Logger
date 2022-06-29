@@ -108,7 +108,12 @@ class Logger implements vscode.WebviewViewProvider {
 				webviewloader();
 			}
 		}, 1000);
-		
+
+		vscode.workspace.onDidSaveTextDocument(() => {
+			console.log("Configuration changed");
+			webviewloader();
+		});
+
 		webviewView.onDidDispose(() =>{
 			panel_created = false;
 			activeLogger = false;
