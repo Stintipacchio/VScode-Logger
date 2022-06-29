@@ -19,7 +19,7 @@
       "properties": {
         "serverAddress": {
           "type": "string",
-          "default": "",
+          "default": "://",
           "scope": "window",
           "description": ""
         },
