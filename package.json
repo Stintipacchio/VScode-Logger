@@ -19,19 +19,19 @@
       "properties": {
         "serverAddress": {
           "type": "string",
-          "default": "://",
+          "default": "://aminsep.disi.unibo.it/logger",
           "scope": "window",
           "description": ""
         },
         "email": {
           "type": "string",
-          "default": "",
+          "default": "andrea.loretti2@studio.unibo.it",
           "scope": "window",
           "description": ""
         },
         "password": {
           "type": "string",
-          "default": "",
+          "default": "fioridicampo20",
           "scope": "window",
           "description": ""
         },
@@ -57,7 +57,7 @@
         "rememberCredentials": {
           "type": "boolean",
           "scope": "window",
-          "default": false,
+          "default": true,
           "description": ""
         }
       }
