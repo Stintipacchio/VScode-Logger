@@ -213,7 +213,7 @@ class Logger implements vscode.WebviewViewProvider {
 					<br>
 
 					<label for="srvadrr"><b>Server Address</b></label><br>
-					<input type="text" placeholder="://internet.example.com" name="srvadrr" required>
+					<input type="text" placeholder="internet.example.com" name="srvadrr" required>
 
 					<br>
 
