@@ -1,6 +1,6 @@
 out
 dist
 node_modules
-*.inometrics.db
+.innometrics.db
 .vscode-test/
 *.vsix
