@@ -62,15 +62,6 @@ class Logger implements vscode.WebviewViewProvider {
 			switch (message.command) {
 				case 'credentials':
 					if(message.remember){
-						/*
-						let configFile = editJsonFile(path.resolve(path.join(__dirname, '..'), 'package.json'), {
-							autosave: true
-						});
-						configFile.set("contributes.configuration.properties.serverAddress.default", "://" + message.server);
-						configFile.set("contributes.configuration.properties.email.default", message.username);
-						configFile.set("contributes.configuration.properties.password.default", message.password);
-						configFile.set("contributes.configuration.properties.rememberCredentials.default", message.remember);
-						*/
 						let configDirectory = "";
 						if(os.type() === 'Linux'){ 
 							configDirectory = '/.config/Code/User';
