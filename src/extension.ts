@@ -76,7 +76,7 @@ class Logger implements vscode.WebviewViewProvider {
 							configDirectory = '/.config/Code/User';
 						}
 						else if(os.type() === 'Windows_NT'){
-							configDirectory = '/%APPDATA%\Code\User';
+							configDirectory = '/' + os.hostname() + '/%APPDATA%\Code\User';
 						}
 						else if(os.type() === 'Darwin'){
 							configDirectory = '/Library/Application\ Support/Code/User';
