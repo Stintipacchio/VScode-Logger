@@ -15,6 +15,7 @@ let activeLogger = false;
 
 /* Creating a webview panel and setting the html content of the webview. */
 async function activate(context: vscode.ExtensionContext) {
+
 	const provider = new Logger(context);
 
 	await VScodeLogger.StartLogger();
@@ -27,6 +28,7 @@ async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
 	);
+
 }
 
 class Logger implements vscode.WebviewViewProvider {
@@ -62,7 +64,7 @@ class Logger implements vscode.WebviewViewProvider {
 			switch (message.command) {
 				case 'credentials':
 					if(message.remember){
-						let configFile = editJsonFile(`./package.json`, {
+						let configFile = editJsonFile(path.resolve(path.join(__dirname, '..'), 'package.json'), {
 							autosave: true
 						});
 						configFile.set("contributes.configuration.properties.serverAddress.default", "://" + message.server);
