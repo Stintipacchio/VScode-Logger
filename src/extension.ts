@@ -76,10 +76,10 @@ class Logger implements vscode.WebviewViewProvider {
 							configDirectory = '/.config/Code/User';
 						}
 						else if(os.type() === 'Windows_NT'){
-							configDirectory = '/' + os.hostname() + '/%APPDATA%\Code\User';
+							configDirectory = '/' + path.join(os.hostname(), '..') + '/AppData/Roaming/Code/User';
 						}
 						else if(os.type() === 'Darwin'){
-							configDirectory = '/Library/Application\ Support/Code/User';
+							configDirectory = '/Library/Application/Support/Code/User';
 						}
 
 						let configFile = editJsonFile(path.resolve(os.homedir() + configDirectory, 'settings.json'), {
