@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
-let home = require('user-home');
+import * as os from 'os';
 import * as editJsonFile from 'edit-json-file';
 import Stopwatch from '../lib/stopwatch.js';
 import VScodeLogger from '../lib/VScode-logger.js';
@@ -15,7 +15,6 @@ let activeLogger = false;
 
 /* Creating a webview panel and setting the html content of the webview. */
 async function activate(context: vscode.ExtensionContext) {
-
 	const provider = new Logger(context);
 
 	await VScodeLogger.StartLogger();
@@ -28,7 +27,6 @@ async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
 	);
-
 }
 
 class Logger implements vscode.WebviewViewProvider {
@@ -64,6 +62,7 @@ class Logger implements vscode.WebviewViewProvider {
 			switch (message.command) {
 				case 'credentials':
 					if(message.remember){
+						/*
 						let configFile = editJsonFile(path.resolve(path.join(__dirname, '..'), 'package.json'), {
 							autosave: true
 						});
@@ -71,6 +70,27 @@ class Logger implements vscode.WebviewViewProvider {
 						configFile.set("contributes.configuration.properties.email.default", message.username);
 						configFile.set("contributes.configuration.properties.password.default", message.password);
 						configFile.set("contributes.configuration.properties.rememberCredentials.default", message.remember);
+						*/
+						let configDirectory = "";
+						if(os.type() === 'Linux'){ 
+							configDirectory = '/.config/Code/User';
+						}
+						else if(os.type() === 'Windows_NT'){
+							configDirectory = '/%APPDATA%\Code\User';
+						}
+						else if(os.type() === 'Darwin'){
+							configDirectory = '/Library/Application\ Support/Code/User';
+						}
+
+						let configFile = editJsonFile(path.resolve(os.homedir() + configDirectory, 'settings.json'), {
+							autosave: true
+						});
+						configFile.set("serverAddress", "://" + message.server);
+						configFile.set("email", message.username);
+						configFile.set("password", message.password);
+						configFile.set("protocol", message.protocol);
+						configFile.set("refreshTime", message.refreshtime);
+						configFile.set("rememberCredentials", message.remember);
 					}
 					else{
 						VScodeLogger.config.serverAddress = message.server;
@@ -189,19 +209,21 @@ class Logger implements vscode.WebviewViewProvider {
 			`<script>
 				const vscode = acquireVsCodeApi();
 
-				async function send_credentials(username, password, remember, server){
+				async function send_credentials(username, password, remember, refreshtime, protocol, server){
 					await vscode.postMessage({
 						command: 'credentials',
 						username: username,
 						password: password,
 						remember: remember,
+						refreshtime: refreshtime,
+						protocol: protocol,
 						server: server
 					});
 				}
 
 			</script>
 
-			<form name="loginForm" onsubmit = 'send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked,loginForm.srvadrr.value);'>
+			<form name="loginForm" onsubmit = 'send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked, loginForm.rfshtime.value, loginForm.proto.value, loginForm.srvadrr.value);'>
 				<div class="container">
 
 					<label for="uname"><b>Username</b></label><br>
@@ -217,6 +239,20 @@ class Logger implements vscode.WebviewViewProvider {
 					<label for="srvadrr"><b>Server Address</b></label><br>
 					<input type="text" placeholder="internet.example.com" name="srvadrr" required>
 
+					<br>
+
+					<label for="rfshtime"><b>Refresh Time</b></label><br>
+					<input type="text" value="100" name="rfshtime" required>
+
+					<br>
+
+					<label for="proto"><b>Protocol</b></label><br>
+					<select type="text" value="https" name="proto" required>
+						<option value="https">https</option>
+						<option value="http">http</option>
+					</select>
+
+					<br>
 					<br>
 
 					<button type="submit">Login</button>
