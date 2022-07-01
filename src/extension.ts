@@ -27,6 +27,7 @@ async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(Logger.viewType, provider),
 	);
+
 }
 
 class Logger implements vscode.WebviewViewProvider {
@@ -35,7 +36,7 @@ class Logger implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 
-	public timer = new Stopwatch();
+	private timer = new Stopwatch();
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -92,7 +93,9 @@ class Logger implements vscode.WebviewViewProvider {
 						VScodeLogger.config.remember = message.remember;
 					}
 					webviewloader();
-					await VScodeLogger.authentication_routine();
+					try{
+						await VScodeLogger.authentication_routine();
+					}catch(err){}
 					webviewloader();
 				return;
 				case 'logout':
