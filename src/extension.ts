@@ -141,8 +141,13 @@ class Logger implements vscode.WebviewViewProvider {
 		const ChartJS_PATH = vscode.Uri.file(
 			path.join(this._extensionContext.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
 		);
+		const BootstrapIconsPATH = vscode.Uri.file(
+			path.join(this._extensionContext.extensionPath, 'node_modules', 'vscode-icons', 'dist', 'index.js')
+		);
 		
 		const ChartJS_URI = webview.asWebviewUri(ChartJS_PATH);
+
+		const BootstrapIconsURI = webview.asWebviewUri(BootstrapIconsPATH);
 		
 		let chartloader = ``;
 		let formloader = ``;
@@ -176,7 +181,13 @@ class Logger implements vscode.WebviewViewProvider {
 			}`;
 
 			formloader =
-			`<label>Weekly Statistics</label>
+			`<br/>
+
+			<div style="text-align: center;">Weekly Statistics 
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-line" viewBox="0 0 16 16">
+					<path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"/>
+				</svg>
+		  	</div>
 
 			<canvas id="LinesCanvas"></canvas>
 
@@ -195,6 +206,22 @@ class Logger implements vscode.WebviewViewProvider {
 				}
 
 			</script>
+
+			<style>
+			button {
+				width: 50px;
+				height: 25px;
+				background-color: #EA2027;
+				color: white;
+				padding: 4px 2px;
+				margin: 4px 0;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				position: absolute;
+				left: 40%;
+			}
+			</style>
 
 			<button onclick="logout()">Logout</button>`;
 		}
@@ -217,11 +244,36 @@ class Logger implements vscode.WebviewViewProvider {
 
 			</script>
 
+			<style>
+			input[type=text], input[type=password], select {
+				width: 170px;
+				height: 25px;
+				padding: 4px 4px;
+				margin: 4px 0;
+				display: inline-block;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				box-sizing: border-box;
+			}
+			button[type=submit] {
+				width: 50px;
+				height: 25px;
+				background-color: #4CAF50;
+				color: white;
+				padding: 4px 2px;
+				margin: 4px 0;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+			}
+
+			</style>
+
 			<form name="loginForm" onsubmit = 'send_credentials(loginForm.uname.value,loginForm.psw.value,loginForm.remember.checked, loginForm.rfshtime.value, loginForm.proto.value, loginForm.srvadrr.value);'>
 				<div class="container">
 
 					<label for="uname"><b>Username</b></label><br>
-					<input type="text" placeholder="Enter Username" name="uname" required>
+					<input type="text" placeholder="Enter Username/mail" name="uname" required>
 				
 					<br>
 
@@ -268,6 +320,7 @@ class Logger implements vscode.WebviewViewProvider {
 		</head>
 
 		<script src="${ChartJS_URI}"></script>
+		<script src="${BootstrapIconsURI}"></script>
 
 		<script>
 
@@ -319,11 +372,19 @@ class Logger implements vscode.WebviewViewProvider {
 		</script>
 
 		<body>
-		<div>DashBoard</div>
-		<label>Current Session</label>
-		<div>Unsent Metrics</div>
-		<span>${VScodeLogger.unsentmetric}</span>
-		<div>Session Time</div>
+		<div>Unsent Metrics: 
+		<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-journal-code" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M8.646 5.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 8 8.646 6.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 8l1.647-1.646a.5.5 0 0 0 0-.708z"/>
+			<path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+			<path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+		</svg>
+		${VScodeLogger.unsentmetric}</div>
+		<div>Session Time
+			<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-stopwatch" viewBox="0 0 16 16">
+				<path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5V5.6z"/>
+				<path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 0 1 .012-.013l.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354a.512.512 0 0 1-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3z"/>
+			</svg>
+		</div>
 		<div id="stopwatch">00:00:00</div>
 
 		${formloader}
