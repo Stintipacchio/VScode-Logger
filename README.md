@@ -4,7 +4,7 @@ This extension helps you store your code metrics through a continuose activity m
 
 ## How to use
 
-After the installation in the Explorer Tab will appear a teardown window named "VS-LOGGER", from there you can login by inserting your credentials and server addres in the form.
+After the installation in the Explorer Tab will appear a teardown window named "VS-LOGGER", from there you can login by inserting your credentials and server address in the form.
 
 ## Features
 
@@ -20,11 +20,6 @@ To work properly this extension need a internet connection.
 
 The extension parameter can be changed in the extension settings tab.
 
-
-## Known Issues
-
-Enlarging the explorer tab could lead to glitch of the Charts.
-A failed login will lead to a blank page to fix close and re open the extension tear menu.
 
 ## Release Notes
 
@@ -51,7 +46,7 @@ Release in testing all the feature should work properly.
 
 ## Before Usage
 
-Open the extension folder in the vscode extensions folder (Windows %USERPROFILE%\. vscode\extensions. || macOS ~/.vscode/extensions || Linux ~/.vscode/extensions) then run from CLI "npm i sqlite3".
+Open the extension folder in the vscode extensions folder (Windows %USERPROFILE%\. vscode\extensions. || macOS ~/.vscode/extensions || Linux ~/.vscode/extensions) then run from CLI "npm i".
 
 
 ## Credits
