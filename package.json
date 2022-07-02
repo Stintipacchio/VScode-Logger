@@ -3,7 +3,7 @@
   "displayName": "VScode-logger",
   "description": "This extension helps you store your code metrics through a continuose activity monitoring such: lines, comments and tests added, modified or deleted. At the same time it also keeps track of the session time and files explorated.",
   "icon": "VScode-Logger.png",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.68.0"
   },
@@ -22,19 +22,19 @@
           "type": "string",
           "default": "://",
           "scope": "window",
-          "description": ""
+          "description": "Sets the server which the metrics will be sent to."
         },
         "email": {
           "type": "string",
           "default": "",
           "scope": "window",
-          "description": ""
+          "description": "Sets the user email or username that will be used to log to the server."
         },
         "password": {
           "type": "string",
           "default": "",
           "scope": "window",
-          "description": ""
+          "description": "Sets the password that will be used to log to the server."
         },
         "protocol": {
           "type": "string",
@@ -44,10 +44,7 @@
             "http",
             "https"
           ],
-          "enumDescriptions": [
-            "",
-            ""
-          ]
+          "description": "Sets the protocol that will be used to connect to the server."
         },
         "refreshTime": {
           "type": "string",
@@ -59,7 +56,7 @@
           "type": "boolean",
           "scope": "window",
           "default": false,
-          "description": ""
+          "description": "If checked the last credentials used to connect to a server will be reutilized."
         }
       }
     },
