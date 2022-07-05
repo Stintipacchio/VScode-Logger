@@ -141,13 +141,8 @@ class Logger implements vscode.WebviewViewProvider {
 		const ChartJS_PATH = vscode.Uri.file(
 			path.join(this._extensionContext.extensionPath, 'node_modules', 'chart.js', 'dist', 'Chart.js')
 		);
-		const BootstrapIconsPATH = vscode.Uri.file(
-			path.join(this._extensionContext.extensionPath, 'node_modules', 'vscode-icons', 'dist', 'index.js')
-		);
 		
 		const ChartJS_URI = webview.asWebviewUri(ChartJS_PATH);
-
-		const BootstrapIconsURI = webview.asWebviewUri(BootstrapIconsPATH);
 		
 		let chartloader = ``;
 		let formloader = ``;
@@ -320,7 +315,6 @@ class Logger implements vscode.WebviewViewProvider {
 		</head>
 
 		<script src="${ChartJS_URI}"></script>
-		<script src="${BootstrapIconsURI}"></script>
 
 		<script>
 

@@ -23,9 +23,12 @@ The extension parameter can be changed in the extension settings tab.
 
 ## Release Notes
 
-v0.0.1
-Release in testing all the feature should work properly.
+v1.0.0
+- 🎉 First release!
 
+v1.0.1
+- Code optimized.
+- Updated Usage instruction.
 
 ## How to install without VS Code Marketplace
 
@@ -46,7 +49,7 @@ Release in testing all the feature should work properly.
 
 ## Before Usage
 
-Open the extension folder in the vscode extensions folder (Windows %USERPROFILE%\. vscode\extensions. || macOS ~/.vscode/extensions || Linux ~/.vscode/extensions) then run from CLI "npm i".
+Open andrealoretti.vscode-logger-1.0.0 in Windows: %USERPROFILE%\. vscode\extensions. || macOS: ~/.vscode/extensions || Linux: ~/.vscode/extensions then run from CLI "npm i" with highest privileges.
 
 
 ## Credits
