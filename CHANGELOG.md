@@ -8,3 +8,7 @@
 
 - Code optimized.
 - Updated Usage instruction.
+
+## 1.0.2
+
+- Fixed Bug couldn't display webview correctly.
