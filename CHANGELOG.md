@@ -11,4 +11,4 @@
 
 ## 1.0.2
 
-- Fixed Bug couldn't display webview correctly.
+- Fixed issue "couldn't display view correctly".
