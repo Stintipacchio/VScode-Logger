@@ -30,6 +30,10 @@ v1.0.1
 - Code optimized.
 - Updated Usage instruction.
 
+v1.0.2
+- Fixed Bug couldn't display webview correctly.
+
+
 ## How to install without VS Code Marketplace
 
 1) Open VS Code.
