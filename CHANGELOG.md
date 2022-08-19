@@ -16,3 +16,7 @@
 ## 1.0.3
 
 - Improved stability.
+
+## 1.0.4
+
+- Fixed bug in metrics sending.

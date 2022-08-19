@@ -21,22 +21,6 @@ To work properly this extension need a internet connection.
 The extension parameter can be changed in the extension settings tab.
 
 
-## Release Notes
-
-v1.0.0
-- 🎉 First release!
-
-v1.0.1
-- Code optimized.
-- Updated Usage instruction.
-
-v1.0.2
-- Fixed Bug couldn't display webview correctly.
-
-v1.0.3
-- Improved stability.
-
-
 ## How to install without VS Code Marketplace
 
 1) Open VS Code.
