@@ -3,7 +3,7 @@
   "displayName": "VScode-logger",
   "description": "This extension helps you store your code metrics through a continuose activity monitoring such: lines, comments and tests added, modified or deleted. At the same time it also keeps track of the session time and files explorated.",
   "icon": "VScode-Logger.png",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "AndreaLoretti",
   "engines": {
     "vscode": "^1.68.0"

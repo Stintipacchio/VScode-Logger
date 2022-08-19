@@ -33,6 +33,9 @@ v1.0.1
 v1.0.2
 - Fixed Bug couldn't display webview correctly.
 
+v1.0.3
+- Improved stability.
+
 
 ## How to install without VS Code Marketplace
 
@@ -53,7 +56,7 @@ v1.0.2
 
 ## Before Usage
 
-Open andrealoretti.vscode-logger-1.0.2 in Windows: %USERPROFILE%\. vscode\extensions. || macOS: ~/.vscode/extensions || Linux: ~/.vscode/extensions then run from CLI "npm i" with highest privileges.
+Open andrealoretti.vscode-logger-1.0.3 in Windows: %USERPROFILE%\. vscode\extensions. || macOS: ~/.vscode/extensions || Linux: ~/.vscode/extensions then run from CLI "npm i" with highest privileges.
 
 Example: sudo npm i
 

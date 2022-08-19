@@ -12,3 +12,7 @@
 ## 1.0.2
 
 - Fixed issue "couldn't display view correctly".
+
+## 1.0.3
+
+- Improved stability.
