@@ -20,3 +20,7 @@
 ## 1.0.4
 
 - Fixed bug in metrics sending.
+
+## 1.0.5
+
+- Security update and bug fixes.
